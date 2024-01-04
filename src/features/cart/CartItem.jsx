@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { removeItem, increaseAmount, decreaseAmount } from "./cartSlice";
+import { removeItem, increaseAmount, decreaseAmount,  } from "./cartSlice";
 
 // eslint-disable-next-line react/prop-types
 function CartItem({ id, name, price, amount }) {

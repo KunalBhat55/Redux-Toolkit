@@ -6,6 +6,7 @@ import Cart from "./features/cart/Cart";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { calculateTotal } from "./features/cart/cartSlice";
+import YourComponent from "./components/PopUp";
 
 function App() {
   const {cartItems} = useSelector((state) => state.cart)
@@ -24,8 +25,9 @@ function App() {
       <header className="App-header">
         {/* <Counter />  */}
         {/* <BackgroundChange />  */}
-        <Cart/>
-        {/* <WeatherInfo /> */}
+        {/* <Cart/> */}
+        <WeatherInfo />
+        <YourComponent />
       </header>
     </div>
   );

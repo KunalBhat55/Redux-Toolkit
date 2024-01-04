@@ -1,35 +1,25 @@
 import { Oval } from "react-loader-spinner";
-import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchWeather } from "./weatherSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function WeatherInfo() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  
+  const {
+    temperature,
+    city,
+    isLoading,
+    min_temp,
+    max_temp,
+    wind,
+    description,
+    humidity,
+  } = useSelector((state) => state.weather);
 
-  // const dispatch = useDispatch();
-  // const weatherData = useSelector((state) => state.weather.tempearture);
-
-  // dispatching the action to get the data from the API
-
-  const city = "London";
-  const appId = "6cef7429e966d71f34a9ef707b28e8f8";
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${appId}&units=metric`;
+  // Redux-Toolkit implementation
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await fetch(url);
-        const result = await response.json();
-        setData(result);
-        console.log("Done!")
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchWeather();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(fetchWeather());
   }, []);
 
   return (
@@ -38,33 +28,32 @@ function WeatherInfo() {
         {/* Redux-Toolkit Practice */}
       </div>
       <div className="text-gray-800 text-center">
-        {loading ? (
+        {isLoading ? (
           // <p className="text-4xl mt-5">{Audio}</p>
           <div className="flex justify-center mt-12">
-            <Oval color="#242424" secondaryColor="#242424" height={50} width={50} />
+            <Oval
+              color="#242424"
+              secondaryColor="#242424"
+              height={50}
+              width={50}
+            />
           </div>
         ) : (
           <div className="my-10">
             <div className="text-3xl">
-              {data.cod != 404 && data.cod != 400 ? (
+              {temperature ? (
                 <div>
-                  <h1 className="text-500">Weather of {data.name} </h1>
+                  <h1 className="text-500">Weather of {city} </h1>
                   <p className="m-1 text-7xl leading-22">
-                    {data.main.temp} <sup>o</sup>C
+                    {temperature} <sup>o</sup>C
                   </p>
+                  <p className="m-3 text-4xl inline-block">Max {max_temp}</p>
+                  <p className="m-3 text-4xl inline-block">Min {min_temp}</p>
                   <p className="m-3 text-4xl inline-block">
-                    Max {data.main.temp_max}
+                    Humidity {humidity}
                   </p>
-                  <p className="m-3 text-4xl inline-block">
-                    Min {data.main.temp_min}
-                  </p>
-                  <p className="m-3 text-4xl inline-block">
-                    Humidity {data.main.humidity}
-                  </p>
-                  <p className="m-3 text-4xl inline-block">
-                    Wind {data.wind.speed * 3.6} km/h
-                  </p>
-                  <p className="m-3 text-4xl">{data.weather[0].description}</p>
+                  <p className="m-3 text-4xl inline-block">Wind {wind} m/s</p>
+                  <p className="m-3 text-4xl">{description}</p>
                 </div>
               ) : (
                 "No Data Found for this city"
