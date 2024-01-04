@@ -1,8 +1,3 @@
-# React + Vite
+# Redux-ToolKit Practice Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a simple and interactive web application designed to provide live weather updates and also a simple mobile store. The primary focus of this practice project was on utilizing Redux Toolkit to manage state and facilitate efficient state management for a seamless user experience.
