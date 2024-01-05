@@ -19,8 +19,8 @@ function WeatherInfo() {
 
   // Redux-Toolkit implementation
   useEffect(() => {
-    dispatch(fetchWeather());
-  }, []);
+    dispatch(fetchWeather(city));
+  }, [city]);
 
   return (
     <div className="weather-div">
@@ -29,7 +29,6 @@ function WeatherInfo() {
       </div>
       <div className="text-gray-800 text-center">
         {isLoading ? (
-          // <p className="text-4xl mt-5">{Audio}</p>
           <div className="flex justify-center mt-12">
             <Oval
               color="#242424"

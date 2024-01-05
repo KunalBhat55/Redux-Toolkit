@@ -1,22 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+ 
 
-
-const city = "London";
-const appId = "6cef7429e966d71f34a9ef707b28e8f8";
-
-const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${appId}&units=metric`;
-
-export const fetchWeather = createAsyncThunk("get/weatherInfo", async () => { // async action creator
-  
-  try {
-    const response = await fetch(url);
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.log(error)
-  }
-})
-
+const appId = import.meta.env.VITE_WEATHER_APP_ID;
 
 const initialState = {
   temperature: 0,
@@ -27,32 +12,55 @@ const initialState = {
   description: "",
   city: "",
   isLoading: true,
-  error: null
-};
+  error: null,
+}
+
+export const fetchWeather = createAsyncThunk("get/weatherInfo", async (city) => { // async action creator
+  
+  try {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${appId}&units=metric`;
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 
 const weatherSlice = createSlice({
   name: "weather",
   initialState,
 
-  reducers: {},
-  extraReducers: (weatherCondition) => {
+  reducers: {
+     
+    setCityName: (state, action) => {
+        
+      state.city = action.payload;
+
+    },
+  },
     
+  extraReducers: (weatherCondition) => {
+
     weatherCondition
     .addCase(fetchWeather.fulfilled, (state, action) => {
       
-      state.temperature = action.payload.main.temp;
-      state.city = action.payload.name;
-      state.min_temp = action.payload.main.temp_min;
-      state.max_temp = action.payload.main.temp_max;
-      state.humidity = action.payload.main.humidity;
-      state.wind = action.payload.wind.speed;
-      state.description = action.payload.weather[0].description;
+      if(action.payload.cod === 200) {
+        state.temperature = action.payload.main.temp;
+        state.min_temp = action.payload.main.temp_min;
+        state.max_temp = action.payload.main.temp_max;
+        state.humidity = action.payload.main.humidity;
+        state.wind = action.payload.wind.speed;
+        state.description = action.payload.weather[0].description;
+        state.city = action.payload.name;
+        state.error = null;
+      }
       state.isLoading = false;
+
     
     })
     .addCase(fetchWeather.pending, (state) => {
-      
       
       state.isLoading = true
     
@@ -64,10 +72,8 @@ const weatherSlice = createSlice({
     
     })
   
-  
   }
-
 });
 
-export const {getTemp} = weatherSlice.actions // export actions
+export const {setCityName} = weatherSlice.actions // export actions
 export default weatherSlice.reducer // export reducer that is used in store.js
